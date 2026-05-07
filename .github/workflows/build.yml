@@ -1,1 +1,15 @@
+name: Build note
 
+on:
+  push:
+  pull_request:
+
+jobs:
+  note:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build note
+        run: |
+          echo "This repo is Geode-ready, but normal CI needs a Geode SDK install/profile."
+          echo "Build locally with: geode build"
