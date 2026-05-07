@@ -35,7 +35,7 @@
       "type": "string",
       "name": "Database URL",
       "description": "Raw GitHub URL to codes.json. Change zBricks to your GitHub username if you fork/rename the repo.",
-      "default": "https://raw.githubusercontent.com/zBricks/redeem-all-codes/main/codes.json",
+      "default": "https://raw.githubusercontent.com/zsbricks/redeem-all-codes/main/codes.json",
       "enable-if": "use-online-database"
     },
     "update-db": {
