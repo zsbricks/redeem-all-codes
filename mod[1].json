@@ -1,0 +1,89 @@
+{
+  "geode": "v5.6.1",
+  "gd": {
+    "win": "2.2081"
+  },
+  "id": "zbricks.redeem-all-codes",
+  "name": "Redeem All Codes",
+  "version": "1.1.0",
+  "developer": "zBricks",
+  "description": "Adds mod settings buttons that update a public code database and submit known public Geometry Dash vault codes.",
+  "tags": ["utility", "enhancement"],
+  "links": {
+    "source": "https://github.com/zBricks/redeem-all-codes"
+  },
+  "settings": {
+    "info": {
+      "type": "title",
+      "name": "Redeem All Codes",
+      "description": "This uses GD's normal secret reward request. It will not bypass locked vaults, missing requirements, limited/event codes, or already-redeemed rewards. The online database is a normal GitHub-hosted JSON file."
+    },
+    "use-online-database": {
+      "type": "bool",
+      "name": "Use online code database",
+      "description": "Downloads codes.json from your GitHub repo. If download fails, the mod uses the cached database or built-in fallback list.",
+      "default": true
+    },
+    "check-before-redeem": {
+      "type": "bool",
+      "name": "Check online DB before redeeming",
+      "description": "When enabled, the Redeem button updates the code database first, then starts redeeming from the fresh list.",
+      "default": true,
+      "enable-if": "use-online-database"
+    },
+    "database-url": {
+      "type": "string",
+      "name": "Database URL",
+      "description": "Raw GitHub URL to codes.json. Change zBricks to your GitHub username if you fork/rename the repo.",
+      "default": "https://raw.githubusercontent.com/zBricks/redeem-all-codes/main/codes.json",
+      "enable-if": "use-online-database"
+    },
+    "update-db": {
+      "type": "custom:action-button",
+      "name": "Update code database",
+      "description": "Downloads codes.json and saves it as the local cache.",
+      "button-text": "Update",
+      "action": "update-database",
+      "enable-if": "use-online-database"
+    },
+    "player-name": {
+      "type": "string",
+      "name": "Player name code",
+      "description": "Optional. The Vault has a code that is your exact current player name. Leave empty to skip it.",
+      "default": ""
+    },
+    "star-count": {
+      "type": "int",
+      "name": "Star count code",
+      "description": "Optional. Vault of Secrets has a code that is your current total stars. Set 0 to skip it.",
+      "default": 0,
+      "min": 0,
+      "max": 1000000,
+      "control": {
+        "arrows": true,
+        "slider": false,
+        "input": true
+      }
+    },
+    "delay-ms": {
+      "type": "int",
+      "name": "Delay between codes (ms)",
+      "description": "Keep this at 1500ms or higher to avoid hammering RobTop's servers.",
+      "default": 1750,
+      "min": 1000,
+      "max": 10000,
+      "control": {
+        "arrows": true,
+        "slider": true,
+        "input": true
+      }
+    },
+    "redeem-now": {
+      "type": "custom:action-button",
+      "name": "Redeem database codes",
+      "description": "Checks the online database first if enabled, then sends codes one by one.",
+      "button-text": "Redeem",
+      "action": "redeem"
+    }
+  }
+}

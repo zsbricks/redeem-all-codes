@@ -1,0 +1,8 @@
+/build/
+/build-*/
+.vscode/
+*.geode
+*.dll
+*.dylib
+*.so
+.DS_Store
