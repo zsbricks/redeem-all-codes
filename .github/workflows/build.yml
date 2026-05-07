@@ -1,15 +1,23 @@
-name: Build note
+name: Build Geode Mod
 
 on:
+  workflow_dispatch:
   push:
-  pull_request:
+    branches:
+      - "**"
 
 jobs:
-  note:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: windows-latest
+
     steps:
       - uses: actions/checkout@v4
-      - name: Build note
-        run: |
-          echo "This repo is Geode-ready, but normal CI needs a Geode SDK install/profile."
-          echo "Build locally with: geode build"
+
+      - name: Build the mod
+        uses: geode-sdk/build-geode-mod@main
+
+      - name: Upload build output
+        uses: actions/upload-artifact@v4
+        with:
+          name: Build Output
+          path: build/*.geode
