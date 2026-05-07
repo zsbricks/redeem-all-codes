@@ -1,1 +1,57 @@
+name: Validate code database
 
+on:
+  push:
+    paths:
+      - codes.json
+      - .github/workflows/validate-codes.yml
+  pull_request:
+    paths:
+      - codes.json
+      - .github/workflows/validate-codes.yml
+
+jobs:
+  validate-codes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Validate codes.json
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          data = json.loads(Path("codes.json").read_text(encoding="utf-8"))
+          codes = []
+
+          def walk(node):
+              if isinstance(node, str):
+                  codes.append(node.strip())
+              elif isinstance(node, list):
+                  for item in node:
+                      walk(item)
+              elif isinstance(node, dict):
+                  if isinstance(node.get("code"), str):
+                      codes.append(node["code"].strip())
+                  for key in ("codes", "items", "entries", "values", "categories"):
+                      if key in node:
+                          walk(node[key])
+
+          walk(data)
+          cleaned = [c for c in codes if c]
+          if len(cleaned) != len(set(cleaned)):
+              seen = set()
+              dupes = []
+              for c in cleaned:
+                  if c in seen and c not in dupes:
+                      dupes.append(c)
+                  seen.add(c)
+              raise SystemExit(f"Duplicate codes: {dupes}")
+          for c in cleaned:
+              if len(c) > 64 or any(ord(ch) < 32 or ord(ch) > 126 for ch in c):
+                  raise SystemExit(f"Invalid code: {c!r}")
+          print(f"OK: {len(cleaned)} codes")
+          PY
